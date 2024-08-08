@@ -1,29 +1,34 @@
+// app/index.tsx
 import React, { useEffect } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
-import ScreenWraper from '@/components/ScreenWraper';
+import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { hp, wp } from '../helpers/common';
 import { theme } from '../constants/Colors';
-import SplashScreen from 'react-native-splash-screen';
-import { useRouter } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
+import ScreenWraper from '@/components/ScreenWraper';
 
-export default function index() {
+SplashScreen.preventAutoHideAsync();
+
+export default function Index() {
   const router = useRouter();
 
   useEffect(() => {
-    // Hide the splash screen after 3 seconds
-    setTimeout(() => {
-      router.push('signUp');
-    }, 3000);
-  }, []);
+    const prepare = async () => {
+      // Preload assets
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      SplashScreen.hideAsync();
+      // Navigate to feed and clear the history stack
+      router.replace('screens/feed');
+    };
+    prepare();
+  }, [router]);
 
   return (
     <ScreenWraper bg={theme.colors.background}>
       <StatusBar style="dark" />
       <View style={styles.container}>
-        {/* Welcome Image */}
         <Image style={styles.welcomeImage} resizeMode='contain' source={require('../assets/images/splash.png')} />
-        {/* title */}
         <Text style={styles.title}>Eroticgram</Text>
         <Text style={styles.splashTitle}>Eroticgram is the platform where words ignite desire</Text>
       </View>
@@ -37,7 +42,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: theme.colors.background,
-    marginHorizontal: wp(4)
+    marginHorizontal: wp(4),
   },
   welcomeImage: {
     height: hp(30),
@@ -54,6 +59,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp(10),
     fontSize: hp(1.7),
     color: theme.colors.roseLight,
-  }
-
-})
+  },
+});
