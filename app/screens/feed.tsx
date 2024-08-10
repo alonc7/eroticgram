@@ -1,33 +1,55 @@
-import React from 'react'
-import { View, Text, FlatList, StyleSheet, Pressable } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
-import { Ionicons } from '@expo/vector-icons'
-import { theme } from '@/constants/Colors'
-import { hp } from '@/helpers/common'
+import React from 'react';
+import { View, Text, FlatList, StyleSheet, Pressable } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
+import { theme } from '@/constants/Colors';
+import { hp } from '@/helpers/common';
+import Post from '@/components/Post'; // Import the Post component
 
 export default function Feed() {
-    const navigation = useNavigation()
+    const navigation = useNavigation();
 
+    // Sample data with enhanced structure for the Post component
     const feedItems = [
-        { id: '1', title: 'First Post', content: 'This is the first post content.' },
-        { id: '2', title: 'Second Post', content: 'This is the second post content.' },
-
-    ]
+        {
+            id: '1',
+            user: {
+                name: 'John Doe',
+                username: 'johndoe',
+                profilePicture: 'https://placeimg.com/64/64/people', // Replace with actual image URL
+            },
+            image: 'https://placeimg.com/640/480/animals', // Replace with actual image URL
+            caption: 'This is the first post content.',
+            likes: 123,
+            comments: 45,
+            date: '2024-08-10',
+        },
+        {
+            id: '2',
+            user: {
+                name: 'Jane Smith',
+                username: 'janesmith',
+                profilePicture: 'https://placeimg.com/64/64/people', // Replace with actual image URL
+            },
+            image: 'https://placeimg.com/640/480/arch', // Replace with actual image URL
+            caption: 'This is the second post content.',
+            likes: 567,
+            comments: 89,
+            date: '2024-08-09',
+        },
+    ];
 
     const handleNavigateToPersonalPage = () => {
-        navigation.navigate('SignUp');
-    }
+        navigation.navigate('SignUp'); // Update navigation logic as needed
+    };
 
     const handleOpenDrawer = () => {
-        navigation.openDrawer()
-    }
+        navigation.openDrawer();
+    };
 
-    const renderItem = ({ item }: { item: { id: string, title: string, content: string } }) => (
-        <View key={item.id} style={styles.feedItem}>
-            <Text style={styles.feedItemTitle}>{item.title}</Text>
-            <Text style={styles.feedItemContent}>{item.content}</Text>
-        </View>
-    )
+    const renderItem = ({ item }) => (
+        <Post key={item.id} {...item} /> // Pass post data as props to the Post component
+    );
 
     return (
         <View style={styles.container}>
@@ -47,7 +69,7 @@ export default function Feed() {
                 contentContainerStyle={styles.flatListContent}
             />
         </View>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
