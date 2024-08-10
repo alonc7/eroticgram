@@ -1,3 +1,4 @@
+import { theme } from '@/constants/Colors';
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, ViewStyle, TextStyle } from 'react-native';
 
@@ -5,7 +6,7 @@ interface ButtonProps {
   isLoading?: boolean;
   leftIcon?: React.ReactElement;
   rightIcon?: React.ReactElement;
-  title: string;
+  title?: string;
   onPress: () => void;
   buttonStyle?: ViewStyle;
   textStyle?: TextStyle;
@@ -40,7 +41,7 @@ const Button = ({
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: 'blue',
+    backgroundColor: 'transpile',
     borderRadius: 5,
     padding: 15,
     alignItems: 'center',

@@ -3,7 +3,7 @@ import { View, Text, FlatList, StyleSheet, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { theme } from '@/constants/Colors';
-import { hp } from '@/helpers/common';
+import { hp, wp } from '@/helpers/common';
 import Post from '@/components/Post'; // Import the Post component
 
 export default function Feed() {
@@ -16,10 +16,96 @@ export default function Feed() {
             user: {
                 name: 'John Doe',
                 username: 'johndoe',
-                profilePicture: 'https://placeimg.com/64/64/people', // Replace with actual image URL
+                profilePicture: 'https://picsum.photos/200/300', // Replace with actual image URL
+            },
+            image: 'https://picsum.photos/200/300', // Replace with actual image URL
+            caption: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
+molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum
+numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium
+optio, eaque rerum! Provident similique accusantium nemo autem. Veritatis
+obcaecati tenetur iure eius earum ut molestias architecto voluptate aliquam
+nihil, eveniet aliquid culpa officia aut! Impedit sit sunt quaerat, odit,
+tenetur error, harum nesciunt ipsum debitis quas aliquid. Reprehenderit,
+quia. Quo neque error repudiandae fuga? Ipsa laudantium molestias eos 
+sapiente officiis modi at sunt excepturi expedita sint? Sed quibusdam
+recusandae alias error harum maxime adipisci amet laborum. Perspiciatis 
+minima nesciunt dolorem! Officiis iure rerum voluptates a cumque velit 
+quibusdam sed amet tempora. Sit laborum ab, eius fugit doloribus tenetur 
+fugiat, temporibus enim commodi iusto libero magni deleniti quod quam 
+consequuntur! Commodi minima excepturi repudiandae velit hic maxime
+doloremque. Quaerat provident commodi consectetur veniam similique ad 
+earum omnis ipsum saepe, voluptas, hic voluptates pariatur est explicabo 
+fugiat, dolorum eligendi quam cupiditate excepturi mollitia maiores labore 
+suscipit quas? Nulla, placeat. Voluptatem quaerat non architecto ab laudantium
+modi minima sunt esse temporibus sint culpa, recusandae aliquam numquam 
+totam ratione voluptas quod exercitationem fuga. Possimus quis earum veniam 
+quasi aliquam eligendi, placeat qui corporis!`,
+            likes: 123,
+            comments: 45,
+            date: '2024-08-10',
+        },
+        {
+            id: '3',
+            user: {
+                name: 'John Doe',
+                username: 'johndoe',
+                profilePicture: 'https://picsum.photos/200/200', // Replace with actual image URL
             },
             image: 'https://placeimg.com/640/480/animals', // Replace with actual image URL
-            caption: 'This is the first post content.',
+            caption: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
+molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum
+numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium
+optio, eaque rerum! Provident similique accusantium nemo autem. Veritatis
+obcaecati tenetur iure eius earum ut molestias architecto voluptate aliquam
+nihil, eveniet aliquid culpa officia aut! Impedit sit sunt quaerat, odit,
+tenetur error, harum nesciunt ipsum debitis quas aliquid. Reprehenderit,
+quia. Quo neque error repudiandae fuga? Ipsa laudantium molestias eos 
+sapiente officiis modi at sunt excepturi expedita sint? Sed quibusdam
+recusandae alias error harum maxime adipisci amet laborum. Perspiciatis 
+minima nesciunt dolorem! Officiis iure rerum voluptates a cumque velit 
+quibusdam sed amet tempora. Sit laborum ab, eius fugit doloribus tenetur 
+fugiat, temporibus enim commodi iusto libero magni deleniti quod quam 
+consequuntur! Commodi minima excepturi repudiandae velit hic maxime
+doloremque. Quaerat provident commodi consectetur veniam similique ad 
+earum omnis ipsum saepe, voluptas, hic voluptates pariatur est explicabo 
+fugiat, dolorum eligendi quam cupiditate excepturi mollitia maiores labore 
+suscipit quas? Nulla, placeat. Voluptatem quaerat non architecto ab laudantium
+modi minima sunt esse temporibus sint culpa, recusandae aliquam numquam 
+totam ratione voluptas quod exercitationem fuga. Possimus quis earum veniam 
+quasi aliquam eligendi, placeat qui corporis!`,
+            likes: 123,
+            comments: 45,
+            date: '2024-08-10',
+        },
+        {
+            id: '4',
+            user: {
+                name: 'John Doe',
+                username: 'johndoe',
+                profilePicture: 'https://picsum.photos/200/500',
+            },
+            image: 'https://placeimg.com/640/480/animals', // Replace with actual image URL
+            caption: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
+molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum
+numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium
+optio, eaque rerum! Provident similique accusantium nemo autem. Veritatis
+obcaecati tenetur iure eius earum ut molestias architecto voluptate aliquam
+nihil, eveniet aliquid culpa officia aut! Impedit sit sunt quaerat, odit,
+tenetur error, harum nesciunt ipsum debitis quas aliquid. Reprehenderit,
+quia. Quo neque error repudiandae fuga? Ipsa laudantium molestias eos 
+sapiente officiis modi at sunt excepturi expedita sint? Sed quibusdam
+recusandae alias error harum maxime adipisci amet laborum. Perspiciatis 
+minima nesciunt dolorem! Officiis iure rerum voluptates a cumque velit 
+quibusdam sed amet tempora. Sit laborum ab, eius fugit doloribus tenetur 
+fugiat, temporibus enim commodi iusto libero magni deleniti quod quam 
+consequuntur! Commodi minima excepturi repudiandae velit hic maxime
+doloremque. Quaerat provident commodi consectetur veniam similique ad 
+earum omnis ipsum saepe, voluptas, hic voluptates pariatur est explicabo 
+fugiat, dolorum eligendi quam cupiditate excepturi mollitia maiores labore 
+suscipit quas? Nulla, placeat. Voluptatem quaerat non architecto ab laudantium
+modi minima sunt esse temporibus sint culpa, recusandae aliquam numquam 
+totam ratione voluptas quod exercitationem fuga. Possimus quis earum veniam 
+quasi aliquam eligendi, placeat qui corporis!`,
             likes: 123,
             comments: 45,
             date: '2024-08-10',
@@ -29,10 +115,30 @@ export default function Feed() {
             user: {
                 name: 'Jane Smith',
                 username: 'janesmith',
-                profilePicture: 'https://placeimg.com/64/64/people', // Replace with actual image URL
+                profilePicture: 'https://picsum.photos/200/300', // Replace with actual image URL
             },
             image: 'https://placeimg.com/640/480/arch', // Replace with actual image URL
-            caption: 'This is the second post content.',
+            caption: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
+molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum
+numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium
+optio, eaque rerum! Provident similique accusantium nemo autem. Veritatis
+obcaecati tenetur iure eius earum ut molestias architecto voluptate aliquam
+nihil, eveniet aliquid culpa officia aut! Impedit sit sunt quaerat, odit,
+tenetur error, harum nesciunt ipsum debitis quas aliquid. Reprehenderit,
+quia. Quo neque error repudiandae fuga? Ipsa laudantium molestias eos 
+sapiente officiis modi at sunt excepturi expedita sint? Sed quibusdam
+recusandae alias error harum maxime adipisci amet laborum. Perspiciatis 
+minima nesciunt dolorem! Officiis iure rerum voluptates a cumque velit 
+quibusdam sed amet tempora. Sit laborum ab, eius fugit doloribus tenetur 
+fugiat, temporibus enim commodi iusto libero magni deleniti quod quam 
+consequuntur! Commodi minima excepturi repudiandae velit hic maxime
+doloremque. Quaerat provident commodi consectetur veniam similique ad 
+earum omnis ipsum saepe, voluptas, hic voluptates pariatur est explicabo 
+fugiat, dolorum eligendi quam cupiditate excepturi mollitia maiores labore 
+suscipit quas? Nulla, placeat. Voluptatem quaerat non architecto ab laudantium
+modi minima sunt esse temporibus sint culpa, recusandae aliquam numquam 
+totam ratione voluptas quod exercitationem fuga. Possimus quis earum veniam 
+quasi aliquam eligendi, placeat qui corporis!`,
             likes: 567,
             comments: 89,
             date: '2024-08-09',
@@ -40,11 +146,12 @@ export default function Feed() {
     ];
 
     const handleNavigateToPersonalPage = () => {
-        navigation.navigate('SignUp'); // Update navigation logic as needed
+        navigation.navigate('accountScreen'); // Update navigation logic as needed
     };
 
     const handleOpenDrawer = () => {
-        navigation.openDrawer();
+        console.log('open drawer');
+
     };
 
     const renderItem = ({ item }) => (
@@ -57,7 +164,7 @@ export default function Feed() {
                 <Pressable onPress={handleNavigateToPersonalPage} style={styles.iconButton}>
                     <Ionicons name="person" size={24} color={theme.colors.text} />
                 </Pressable>
-                <Text style={styles.title}>Feed</Text>
+                <Text style={styles.title}>Eroticgram</Text>
                 <Pressable onPress={handleOpenDrawer} style={styles.iconButton}>
                     <Ionicons name="menu" size={24} color={theme.colors.text} />
                 </Pressable>
@@ -82,7 +189,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: hp(2),
-        backgroundColor: theme.colors.primary,
+        backgroundColor: theme.colors.secondary,
     },
     title: {
         fontSize: 20,
@@ -94,12 +201,6 @@ const styles = StyleSheet.create({
     },
     flatListContent: {
         padding: hp(2),
-    },
-    feedItem: {
-        marginBottom: hp(2),
-        padding: hp(2),
-        backgroundColor: theme.colors.secondary,
-        borderRadius: 8,
     },
     feedItemTitle: {
         fontSize: 18,

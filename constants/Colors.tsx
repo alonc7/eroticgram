@@ -17,19 +17,17 @@ export const theme = {
     tabIconSelected: tintColorDark,
   },
   colors: {
-    primary: '#FF2E63',  // Passionate Red
-    secondary: '#800080',  // Deep Purple
-    background: '#1A1A1D',  // Dark Charcoal
-    accent1: '#FFD700',  // Sensual Gold
-    accent2: '#FF6F61',  // Hot Coral
-    neutral: '#E6E6E6',  // Light Gray
-    text: '#FFFFFF',  // White
-    border: '#333333',// Dark Gray
+    primary: '#FF2E63', // Passionate Red
+    secondary: '#800080', // Deep Purple
+    background: '#1A1A1D', // Dark Charcoal
+    accent1: '#FFD700', // Sensual Gold
+    accent2: '#FF6F61', // Hot Coral
+    neutral: '#E6E6E6', // Light Gray
+    text: '#FFFFFF', // White
+    border: '#333333', // Dark Gray
     rose: '#a93f4e',
     roseLight: '#f87171'
   },
-
-
   fonts: {
     medium: '500',
     semibold: '600',
