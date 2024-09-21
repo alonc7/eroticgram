@@ -1,280 +1,201 @@
-import React, { useState } from 'react'
-import { Alert, StyleSheet, View, Text, ScrollView, Pressable, TextInput } from 'react-native'
-import { supabase } from '../../lib/supabase'
-import { isLoading } from 'expo-font'
-import { theme } from '@/constants/Colors'
-import { hp, } from '@/helpers/common'
-import { Input } from '@rneui/base';
-import Loading from '@/components/Loading'
+import React, { useState } from 'react';
+import { View, Text, TextInput, StyleSheet, Alert, Pressable, KeyboardAvoidingView, Platform, Animated, ScrollView } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons } from '@expo/vector-icons';
+import { supabase } from '../../lib/supabase';
+import { theme } from '@/constants/Colors';
+import { hp, wp } from '@/helpers/common';
 
-export default function SignUPForm() {
-    const [loading, setLoading] = useState(false)
-    const [isCreator, setIsCreator] = useState(true);
-    const [creatorData, setCreatorData] = useState({
-        name: '',
-        email: '',
-        password: '',
-        username: '',
-        bio: '',
-        contentNiche: '',
-        socialMediaHandles: '',
-        profilePicture: '',
-        contentSamples: ''
-    });
-    const [consumerData, setConsumerData] = useState({
-        name: '',
-        email: '',
-        password: '',
-        username: '',
-        profilePicture: '',
-        interests: ''
-    });
+const SignUpForm = () => {
+    const [fadeAnim] = useState(new Animated.Value(0));
+    const [loading, setLoading] = useState(false);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [username, setUsername] = useState('');
 
-    const handleCreatorChange = (name: string, value: string) => {
-        setCreatorData({ ...creatorData, [name]: value });
-    };
-
-    const handleConsumerChange = (name: string, value: string) => {
-        setConsumerData({ ...consumerData, [name]: value });
-    };
-
-    const switchForm = () => {
-        setIsCreator(!isCreator);
-    }
-
-
+    React.useEffect(() => {
+        Animated.timing(fadeAnim, {
+            toValue: 1,
+            duration: 1000,
+            useNativeDriver: true,
+        }).start();
+    }, []);
 
     async function signUpWithEmail() {
-        setLoading(true)
-        const { data: { session }, error, } = await supabase.auth.signUp({
-            email: isCreator ? creatorData.email : consumerData.email,
-            password: isCreator ? creatorData.password : consumerData.password,
-        })
+        setLoading(true);
+        const { error } = await supabase.auth.signUp({ email, password });
 
-        if (error) Alert.alert(error.message)
-        if (!session) Alert.alert('Please check your inbox for email verification!')
-        setLoading(false)
+        if (error) Alert.alert('Error', error.message);
+        else Alert.alert('Success', 'Please verify your email!');
+        setLoading(false);
     }
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
-            <View style={styles.header}>
-                <Text style={styles.title}>{isCreator ? 'Join as Content Creator' : 'Content Consumer Registration'}</Text>
-                <Pressable onPress={switchForm}>
-                    <Text style={styles.switchText}>{isCreator ? 'Join as Content Creator' : 'Join as Consumer'}</Text>
-                </Pressable>
-            </View>
-            {isCreator ? (
-                <View>
-                    <Input
-                        style={styles.inputWrapper}
-                        placeholder="Name"
-                        value={creatorData.name}
-                        onChangeText={(text) => handleCreatorChange('name', text)}
-                        leftIcon={{ type: 'font-awesome', name: 'user', color: theme.colors.neutral }}
-                        // rightIcon={{ type: 'font-awesome', name: 'check-circle', color: 'green' }} // Show validation icon
-                        autoCapitalize="none"
-                    />
-                    <Input
-                        style={styles.inputWrapper}
-                        placeholder="User name"
-                        value={creatorData.username}
-                        onChangeText={(text) => handleCreatorChange('username', text)}
-                        leftIcon={{ type: 'font-awesome', name: 'user', color: theme.colors.neutral }}
-                        // rightIcon={{ type: 'font-awesome', name: 'check-circle', color: 'green' }} // Show validation icon
-                        autoCapitalize="none"
-                    />
-                    <Input
-                        style={styles.inputWrapper}
-                        placeholder="Email"
-                        value={creatorData.email}
-                        onChangeText={(text) => handleCreatorChange('email', text)}
-                        leftIcon={{ type: 'font-awesome', name: 'envelope', color: theme.colors.neutral }}
+        <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={styles.container}
+        >
+            <LinearGradient
+                colors={[theme.colors.background, theme.colors.secondary]}
+                style={styles.gradient}
+            >
+                <ScrollView contentContainerStyle={styles.scrollContainer}>
+                    <Animated.View style={[styles.formContainer, { opacity: fadeAnim }]}>
+                        <Text style={styles.title}>Create an Account</Text>
+                        <Text style={styles.subtitle}>Sign up to get started</Text>
 
-                    />
-                    <Input
-                        style={styles.inputWrapper}
-                        placeholder="Password"
-                        value={creatorData.password}
-                        onChangeText={(text) => handleCreatorChange('password', text)}
-                        secureTextEntry
-                        leftIcon={{ type: 'font-awesome', name: 'key', color: theme.colors.neutral }}
+                        <View style={styles.inputWrapper}>
+                            <Ionicons name="person-outline" size={24} color={theme.colors.text} style={styles.icon} />
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Username"
+                                placeholderTextColor={theme.colors.neutral}
+                                value={username}
+                                onChangeText={setUsername}
+                                autoCapitalize="none"
+                            />
+                        </View>
 
-                    />
-                    <Input
-                        style={styles.inputWrapper}
-                        placeholder="Bio"
-                        value={creatorData.bio}
-                        onChangeText={(text) => handleCreatorChange('bio', text)}
-                        leftIcon={{ type: 'font-awesome', name: 'book', color: theme.colors.neutral }}
+                        <View style={styles.inputWrapper}>
+                            <Ionicons name="mail-outline" size={24} color={theme.colors.text} style={styles.icon} />
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Email"
+                                placeholderTextColor={theme.colors.neutral}
+                                value={email}
+                                onChangeText={setEmail}
+                                keyboardType="email-address"
+                                autoCapitalize="none"
+                            />
+                        </View>
 
-                    />
-                    <Input
-                        style={styles.inputWrapper}
-                        placeholder="Profile Picture URL (optional)"
-                        value={creatorData.profilePicture}
-                        onChangeText={(text) => handleCreatorChange('profilePicture', text)}
-                        leftIcon={{ type: 'font-awesome', name: 'image', color: theme.colors.neutral }}
+                        <View style={styles.inputWrapper}>
+                            <Ionicons name="lock-closed-outline" size={24} color={theme.colors.text} style={styles.icon} />
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Password"
+                                placeholderTextColor={theme.colors.neutral}
+                                value={password}
+                                onChangeText={setPassword}
+                                secureTextEntry
+                            />
+                        </View>
 
-                    />
-                    <Input
-                        style={styles.inputWrapper}
-                        placeholder="Content Niche"
-                        value={creatorData.contentNiche}
-                        onChangeText={(text) => handleCreatorChange('contentNiche', text)}
-                        leftIcon={{ type: 'font-awesome', name: '', color: theme.colors.neutral }}
-
-                    />
-                    <Input
-                        style={styles.inputWrapper}
-                        placeholder="Social Media Handles"
-                        value={creatorData.socialMediaHandles}
-                        onChangeText={(text) => handleCreatorChange('socialMediaHandles', text)}
-                        leftIcon={{ type: 'font-awesome', name: '', color: theme.colors.neutral }}
-
-                    />
-                </View>
-            ) : (
-                <View>
-
-                    <Input
-                        style={styles.inputWrapper}
-                        placeholder="Name"
-                        value={consumerData.name}
-                        onChangeText={(text) => handleConsumerChange('name', text)}
-                        leftIcon={{ type: 'font-awesome', name: 'user', color: theme.colors.neutral }}
-                        // rightIcon={{ type: 'font-awesome', name: 'check-circle', color: 'green' }} // Show validation icon
-                        autoCapitalize="none"
-                    />
-                    <Input
-                        style={styles.inputWrapper}
-                        placeholder="User name"
-                        value={consumerData.username}
-                        onChangeText={(text) => handleConsumerChange('username', text)}
-                        leftIcon={{ type: 'font-awesome', name: 'user', color: theme.colors.neutral }}
-                        // rightIcon={{ type: 'font-awesome', name: 'check-circle', color: 'green' }} // Show validation icon
-                        autoCapitalize="none"
-                    />
-                    <Input
-                        style={styles.inputWrapper}
-                        placeholder="Email"
-                        value={consumerData.email}
-                        onChangeText={(text) => handleConsumerChange('email', text)}
-                        leftIcon={{ type: 'font-awesome', name: 'envelope', color: theme.colors.neutral }}
-
-                    />
-                    <Input
-                        style={styles.inputWrapper}
-                        placeholder="Password"
-                        value={consumerData.password}
-                        onChangeText={(text) => handleConsumerChange('password', text)}
-                        secureTextEntry
-                        leftIcon={{ type: 'font-awesome', name: 'key', color: theme.colors.neutral }}
-
-                    />
-                    <Input
-                        style={styles.inputWrapper}
-                        placeholder="User name"
-                        value={consumerData.username}
-                        onChangeText={(text) => handleConsumerChange('username', text)}
-                        leftIcon={{ type: 'font-awesome', name: 'user', color: theme.colors.neutral }}
-                        // rightIcon={{ type: 'font-awesome', name: 'check-circle', color: 'green' }} // Show validation icon
-                        autoCapitalize="none"
-                    />
-
-                    <Input
-                        style={styles.inputWrapper}
-                        placeholder="Profile Picture URL (optional)"
-                        value={consumerData.profilePicture}
-                        onChangeText={(text) => handleConsumerChange('profilePicture', text)}
-                        leftIcon={{ type: 'font-awesome', name: 'image', color: theme.colors.neutral }}
-
-                    />
-                    <TextInput
-                        style={styles.inputWrapper}
-                        placeholder="Interests or Preferred Content Categories (optional)"
-                        value={consumerData.interests}
-                        onChangeText={(text) => handleConsumerChange('interests', text)}
-                    />
-
-                </View>
-            )}
-
-
-            <View>
-                {!isLoading ? (
-                    <Loading />
-                ) :
-                    (
-                        <Pressable style={[styles.button]} onPress={() => signUpWithEmail()} >
-                            <Text style={styles.buttonText}>Sign up</Text>
+                        <Pressable
+                            style={[styles.button, loading && styles.buttonDisabled]}
+                            onPress={signUpWithEmail}
+                            disabled={loading}
+                        >
+                            <Text style={styles.buttonText}>
+                                {loading ? 'Signing Up...' : 'Sign Up'}
+                            </Text>
                         </Pressable>
-                    )}
-            </View>
-        </ScrollView >
 
-    )
-}
+                        <View style={styles.switchContainer}>
+                            <Text style={styles.switchText}>Already have an account? </Text>
+                            <Pressable>
+                                <Text style={styles.switchLink}>Log In</Text>
+                            </Pressable>
+                        </View>
+                    </Animated.View>
+                </ScrollView>
+            </LinearGradient>
+        </KeyboardAvoidingView>
+    );
+};
 
 const styles = StyleSheet.create({
     container: {
-        flexGrow: 1,
-        justifyContent: 'center',
-        paddingHorizontal: hp(40),
-        backgroundColor: theme.colors.background,
+        flex: 1,
     },
-    header: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
+    gradient: {
+        flex: 1,
+        justifyContent: 'center',
         alignItems: 'center',
     },
+    scrollContainer: {
+        flexGrow: 1,
+        justifyContent: 'center',
+    },
+    formContainer: {
+        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+        borderRadius: 20,
+        padding: hp(4),
+        alignItems: 'center',
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
     title: {
-        fontSize: 24,
+        fontSize: hp(4),
         fontWeight: 'bold',
-        // marginBottom: 16,
-        // textAlign: 'center',
-        color: theme.colors.primary,
+        color: theme.colors.text,
+        marginBottom: hp(1),
+    },
+    subtitle: {
+        fontSize: hp(2),
+        color: theme.colors.neutral,
+        marginBottom: hp(3),
     },
     inputWrapper: {
         flexDirection: 'row',
         alignItems: 'center',
-        // height: hp(0.5),
-        borderWidth: 1,
-        margin: hp(1),
-        paddingHorizontal: 8,
-        borderRadius: 4,
-        backgroundColor: theme.colors.rose,
-        color: theme.colors.text,
-        // backgroundColor: 'transparent', // Transparent background
-        borderColor: theme.colors.secondary, // Border color
-        // color: theme.colors.secondary, // Change text color to match border
-
+        width: '100%',
+        height: hp(6),
+        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+        borderRadius: 10,
+        marginBottom: hp(2),
+        paddingHorizontal: wp(3),
     },
     icon: {
-        marginRight: 8,
+        marginRight: wp(2),
     },
-
+    input: {
+        flex: 1,
+        color: theme.colors.text,
+        fontSize: hp(2),
+    },
     button: {
-        // backgroundColor: theme.colors.secondary,
-        // marginBottom: hp(2),
-        borderRadius: 10,
-        padding: hp(0.7),
-        shadowColor: theme.colors.neutral,
-        shadowOffset: { width: 0, height: 3 },
-        shadowOpacity: 0.55,
-        shadowRadius: 3,
-        elevation:
-            5, // For Android shadow
-        backgroundColor: 'transparent', // Transparent background
-        borderWidth: 1, // Add a border
-        borderColor: theme.colors.secondary, // Border color
-        color: theme.colors.secondary, // Change text color to match border
+        backgroundColor: theme.colors.accent2,
+        paddingVertical: hp(1.5),
+        paddingHorizontal: wp(10),
+        borderRadius: 25,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
+    buttonDisabled: {
+        opacity: 0.7,
     },
     buttonText: {
+        color: theme.colors.text,
         textAlign: 'center',
-        color: theme.colors.primary,
+        fontWeight: 'bold',
+        fontSize: hp(2.2),
+    },
+    switchContainer: {
+        flexDirection: 'row',
+        marginTop: hp(3),
     },
     switchText: {
-        color: theme.colors.roseLight
+        color: theme.colors.neutral,
+        fontSize: hp(1.8),
+    },
+    switchLink: {
+        color: theme.colors.accent1,
+        fontSize: hp(1.8),
+        fontWeight: 'bold',
     },
 });
+
+export default SignUpForm;

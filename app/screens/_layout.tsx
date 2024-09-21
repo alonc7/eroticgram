@@ -1,18 +1,14 @@
-import { StyleSheet } from 'react-native'
-import React from 'react'
-import { Stack } from 'expo-router'
+import React from 'react';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import DrawerNavigation from '../Navigation/Drawer/DrawerNavigation';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import TabsNavigation from '../Navigation/Tabs/TabNavigation';
 
-const RootLayout = () => {
+
+export default function Layout() {
     return (
-        <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="index" options={{ headerShown: false }} />
-            <Stack.Screen name="login" options={{ headerShown: false }} />
-            <Stack.Screen name="signUp" options={{ headerShown: false }} />
-            <Stack.Screen name="accountScreen" options={{ headerShown: false }} />
-        </Stack>
-    )
+        <GestureHandlerRootView style={{ flex: 1 }}>
+            <DrawerNavigation />
+        </GestureHandlerRootView>
+    );
 }
-
-export default RootLayout
-
-const styles = StyleSheet.create({})
