@@ -8,36 +8,30 @@ import { theme } from '@/constants/Colors';
 import { LinearGradient } from 'expo-linear-gradient';
 import SignUpForm from '@/app/screens/signUp';
 import LoginForm from '@/app/screens/login';
+import BottomTabNavigation from './TabNavigation/TabNavigation';
 export default function DrawerNavigation() {
   const Drawer = createDrawerNavigator();
   return (
     <Drawer.Navigator
-      initialRouteName="Feed"
+      initialRouteName="BottomTabs"
       screenOptions={{
-        drawerType: 'back', // Drawer type: front, back, permanent
-        drawerStyle: styles.drawer, // Refactored style
-        drawerActiveTintColor: theme.colors.roseLight, // Active item color
-        drawerInactiveTintColor: theme.colors.rose, // Inactive item color
-        drawerLabelStyle: styles.drawerLabel, // Label style
-        headerShown: true, // Show header
+        drawerType: 'back',
+        drawerStyle: { backgroundColor: theme.colors.background, width: 240 },
+        drawerActiveTintColor: theme.colors.roseLight,
+        drawerInactiveTintColor: theme.colors.rose,
+        drawerLabelStyle: { fontSize: 16, fontWeight: 'bold', color: theme.colors.text },
+        headerShown: true,
         headerBackground: () => (
-          <LinearGradient
-            colors={[theme.colors.rose, theme.colors.roseLight]}
-            style={styles.header} /> // color of the header background 
-        )
-
+          <LinearGradient colors={[theme.colors.rose, theme.colors.roseLight]} style={{ height: '100%' }} />
+        ),
       }}
     >
-      {/* Feed Screen */}
       <Drawer.Screen
         name="EroticGram"
-        component={Feed}
+        component={BottomTabNavigation}
         options={{
           drawerLabel: 'Feed',
-          drawerIcon: ({ color }) => (
-            <Ionicons name="home" size={24} color={color} accessibilityLabel="Feed" />
-          ),
-
+          drawerIcon: ({ color }) => <Ionicons name="home" size={24} color={color} />,
         }}
       />
 

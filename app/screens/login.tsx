@@ -1,10 +1,23 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Alert, Pressable, KeyboardAvoidingView, Platform, Animated } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {
+    View,
+    Text,
+    TextInput,
+    StyleSheet,
+    Alert,
+    Pressable,
+    KeyboardAvoidingView,
+    Platform,
+    Animated,
+    Dimensions,
+} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { supabase } from '../../lib/supabase';
 import { theme } from '@/constants/Colors';
-import { hp, wp } from '@/helpers/common';
+import { useNavigation } from '@react-navigation/native';
+
+const { height, width } = Dimensions.get('window');
 
 const LoginForm = () => {
     const [email, setEmail] = useState('');
@@ -12,8 +25,9 @@ const LoginForm = () => {
     const [loading, setLoading] = useState(false);
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const fadeAnim = useState(new Animated.Value(0))[0];
+    const navigation = useNavigation();
 
-    React.useEffect(() => {
+    useEffect(() => {
         Animated.timing(fadeAnim, {
             toValue: 1,
             duration: 1000,
@@ -42,11 +56,16 @@ const LoginForm = () => {
                 style={styles.gradient}
             >
                 <Animated.View style={[styles.formContainer, { opacity: fadeAnim }]}>
-                    <Text style={styles.title}>Welcome Back</Text>
+                    <Text style={styles.title}>Welcome</Text>
                     <Text style={styles.subtitle}>Sign in to continue</Text>
 
                     <View style={styles.inputWrapper}>
-                        <Ionicons name="mail-outline" size={24} color={theme.colors.text} style={styles.icon} />
+                        <Ionicons
+                            name="mail-outline"
+                            size={width * 0.06}
+                            color={theme.colors.text}
+                            style={styles.icon}
+                        />
                         <TextInput
                             style={styles.input}
                             placeholder="Email"
@@ -59,7 +78,12 @@ const LoginForm = () => {
                     </View>
 
                     <View style={styles.inputWrapper}>
-                        <Ionicons name="lock-closed-outline" size={24} color={theme.colors.text} style={styles.icon} />
+                        <Ionicons
+                            name="lock-closed-outline"
+                            size={width * 0.06}
+                            color={theme.colors.text}
+                            style={styles.icon}
+                        />
                         <TextInput
                             style={styles.input}
                             placeholder="Password"
@@ -71,7 +95,7 @@ const LoginForm = () => {
                         <Pressable onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
                             <Ionicons
                                 name={isPasswordVisible ? "eye-off-outline" : "eye-outline"}
-                                size={24}
+                                size={width * 0.06}
                                 color={theme.colors.text}
                             />
                         </Pressable>
@@ -93,7 +117,7 @@ const LoginForm = () => {
 
                     <View style={styles.signupContainer}>
                         <Text style={styles.signupText}>Don't have an account? </Text>
-                        <Pressable>
+                        <Pressable onPress={() => navigation.navigate('SignUp')}>
                             <Text style={styles.signupLink}>Sign Up</Text>
                         </Pressable>
                     </View>
@@ -113,69 +137,69 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     formContainer: {
-        width: '80%',
+        width: '100%',
         backgroundColor: 'rgba(255, 255, 255, 0.1)',
         borderRadius: 20,
-        padding: hp(4),
+        padding: height * 0.04,
         alignItems: 'center',
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
-            height: 2,
+            height: height * 0.002,
         },
         shadowOpacity: 0.25,
-        shadowRadius: 3.84,
+        shadowRadius: height * 0.005,
         elevation: 5,
     },
     title: {
-        fontSize: hp(4),
+        fontSize: height * 0.04,
         fontWeight: 'bold',
         color: theme.colors.text,
-        marginBottom: hp(1),
+        marginBottom: height * 0.01,
     },
     subtitle: {
-        fontSize: hp(2),
+        fontSize: height * 0.02,
         color: theme.colors.neutral,
-        marginBottom: hp(3),
+        marginBottom: height * 0.03,
     },
     inputWrapper: {
         flexDirection: 'row',
         alignItems: 'center',
         width: '100%',
-        height: hp(6),
+        height: height * 0.06,
         backgroundColor: 'rgba(255, 255, 255, 0.2)',
         borderRadius: 10,
-        marginBottom: hp(2),
-        paddingHorizontal: wp(3),
+        marginBottom: height * 0.02,
+        paddingHorizontal: width * 0.03,
     },
     icon: {
-        marginRight: wp(2),
+        marginRight: width * 0.02,
     },
     input: {
         flex: 1,
         color: theme.colors.text,
-        fontSize: hp(2),
+        fontSize: height * 0.02,
     },
     forgotPassword: {
         alignSelf: 'flex-end',
-        marginBottom: hp(3),
+        marginBottom: height * 0.03,
     },
     forgotPasswordText: {
         color: theme.colors.accent1,
-        fontSize: hp(1.8),
+        fontSize: height * 0.018,
     },
     button: {
         backgroundColor: theme.colors.accent2,
-        paddingVertical: hp(1.5),
-        paddingHorizontal: wp(10),
+        paddingVertical: height * 0.015,
+        paddingHorizontal: width * 0.1,
         borderRadius: 25,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
-            height: 2,
+            height: height * 0.002,
         },
         shadowOpacity: 0.25,
-        shadowRadius: 3.84,
+        shadowRadius: height * 0.005,
         elevation: 5,
     },
     buttonDisabled: {
@@ -185,19 +209,19 @@ const styles = StyleSheet.create({
         color: theme.colors.text,
         textAlign: 'center',
         fontWeight: 'bold',
-        fontSize: hp(2.2),
+        fontSize: height * 0.022,
     },
     signupContainer: {
         flexDirection: 'row',
-        marginTop: hp(3),
+        marginTop: height * 0.03,
     },
     signupText: {
         color: theme.colors.neutral,
-        fontSize: hp(1.8),
+        fontSize: height * 0.018,
     },
     signupLink: {
         color: theme.colors.accent1,
-        fontSize: hp(1.8),
+        fontSize: height * 0.018,
         fontWeight: 'bold',
     },
 });

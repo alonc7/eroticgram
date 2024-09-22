@@ -134,9 +134,6 @@ export default function Feed() {
 
     };
 
-    const handleOpenDrawer = () => {
-        // navigation.dispatch(DrawerActions.openDrawer());
-    };
 
 
     const renderItem = ({ item }) => (
@@ -183,7 +180,7 @@ const styles = StyleSheet.create({
         padding: hp(1),
     },
     flatListContent: {
-        padding: hp(2),
+        padding: hp(1),
     },
     feedItemTitle: {
         fontSize: 18,

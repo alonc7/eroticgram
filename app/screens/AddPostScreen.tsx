@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Alert, Pressable, KeyboardAvoidingView, Platform, Animated, ScrollView, Dimensions } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, StyleSheet, Pressable, KeyboardAvoidingView, Platform, Animated, ScrollView, Alert } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import { supabase } from '../../lib/supabase';
 import { theme } from '@/constants/Colors';
-import { hp, wp } from '@/helpers/common';
+import { useNavigation } from '@react-navigation/native';
+import { Dimensions } from 'react-native';
 
 const { height, width } = Dimensions.get('window');
 
-const SignUpForm = () => {
+const AddPostScreen = () => {
     const [fadeAnim] = useState(new Animated.Value(0));
     const [loading, setLoading] = useState(false);
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [username, setUsername] = useState('');
+    const [title, setTitle] = useState('');
+    const [content, setContent] = useState('');
+    const navigation = useNavigation();
 
-    React.useEffect(() => {
+    useEffect(() => {
         Animated.timing(fadeAnim, {
             toValue: 1,
             duration: 1000,
@@ -23,14 +23,20 @@ const SignUpForm = () => {
         }).start();
     }, []);
 
-    async function signUpWithEmail() {
-        setLoading(true);
-        const { error } = await supabase.auth.signUp({ email, password });
-
-        if (error) Alert.alert('Error', error.message);
-        else Alert.alert('Success', 'Please verify your email!');
-        setLoading(false);
-    }
+    const handlePost = () => {
+        if (title && content) {
+            setLoading(true);
+            // Simulate post saving logic, then reset the form
+            setTimeout(() => {
+                setLoading(false);
+                setTitle('');
+                setContent('');
+                navigation.goBack(); // Navigate back to feed after posting
+            }, 2000);
+        } else {
+            Alert.alert('Error', 'Title and content cannot be empty.');
+        }
+    };
 
     return (
         <KeyboardAvoidingView
@@ -43,67 +49,50 @@ const SignUpForm = () => {
             >
                 <ScrollView contentContainerStyle={styles.scrollContainer}>
                     <Animated.View style={[styles.formContainer, { opacity: fadeAnim }]}>
-                        <Text style={styles.title}>Create an Account</Text>
-                        <Text style={styles.subtitle}>Sign up to get started</Text>
-                        
-                        <Pressable style={styles.extrasButton}>
-                            <Ionicons name="camera-outline" size={24} color={theme.colors.accent1} />
-                            <Text style={styles.extrasText}>Add Photo</Text>
-                        </Pressable>
-                        
+                        <Text style={styles.title}>Create a Magical Post</Text>
+                        <Text style={styles.subtitle}>Share your thoughts, creativity, or story.</Text>
+
                         <View style={styles.inputWrapper}>
-                            <Ionicons name="person-outline" size={24} color={theme.colors.text} style={styles.icon} />
+                            <Ionicons name="pencil-outline" size={24} color={theme.colors.text} style={styles.icon} />
                             <TextInput
                                 style={styles.input}
-                                placeholder="Username"
+                                placeholder="Post Title"
                                 placeholderTextColor={theme.colors.neutral}
-                                value={username}
-                                onChangeText={setUsername}
+                                value={title}
+                                onChangeText={setTitle}
                                 autoCapitalize="none"
                             />
                         </View>
 
-                        <View style={styles.inputWrapper}>
-                            <Ionicons name="mail-outline" size={24} color={theme.colors.text} style={styles.icon} />
+                        <View style={styles.textAreaWrapper}>
+                            <Ionicons name="document-text-outline" size={24} color={theme.colors.text} style={styles.icon} />
                             <TextInput
-                                style={styles.input}
-                                placeholder="Email"
+                                style={styles.textArea}
+                                placeholder="What's on your mind?"
                                 placeholderTextColor={theme.colors.neutral}
-                                value={email}
-                                onChangeText={setEmail}
-                                keyboardType="email-address"
-                                autoCapitalize="none"
-                            />
-                        </View>
-
-                        <View style={styles.inputWrapper}>
-                            <Ionicons name="lock-closed-outline" size={24} color={theme.colors.text} style={styles.icon} />
-                            <TextInput
-                                style={styles.input}
-                                placeholder="Password"
-                                placeholderTextColor={theme.colors.neutral}
-                                value={password}
-                                onChangeText={setPassword}
-                                secureTextEntry
+                                value={content}
+                                onChangeText={setContent}
+                                multiline
+                                numberOfLines={6}
                             />
                         </View>
 
                         <Pressable
                             style={[styles.button, loading && styles.buttonDisabled]}
-                            onPress={signUpWithEmail}
+                            onPress={handlePost}
                             disabled={loading}
                         >
                             <Text style={styles.buttonText}>
-                                {loading ? 'Signing Up...' : 'Sign Up'}
+                                {loading ? 'Posting...' : 'Post'}
                             </Text>
-
                         </Pressable>
 
-                        <View style={styles.switchContainer}>
-                            <Text style={styles.switchText}>Already have an account? </Text>
-                            <Pressable>
-                                <Text style={styles.switchLink}>Log In</Text>
-                            </Pressable>
+                        <View style={styles.extrasContainer}>
+                        
+                            {/* <Pressable style={styles.extrasButton}>
+                                <Ionicons name="mic-outline" size={24} color={theme.colors.accent1} />
+                                <Text style={styles.extrasText}>Record Audio</Text>
+                            </Pressable> */}
                         </View>
                     </Animated.View>
                 </ScrollView>
@@ -124,31 +113,35 @@ const styles = StyleSheet.create({
     scrollContainer: {
         flexGrow: 1,
         justifyContent: 'center',
+        paddingHorizontal: '5%', // Added padding for responsiveness
     },
     formContainer: {
+        width: '100%',
         backgroundColor: 'rgba(255, 255, 255, 0.1)',
         borderRadius: 20,
-        padding: hp(4),
+        padding: height * 0.04,
         alignItems: 'center',
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
-            height: 2,
+            height: height * 0.002,
         },
         shadowOpacity: 0.25,
-        shadowRadius: 3.84,
+        shadowRadius: height * 0.005,
         elevation: 5,
     },
     title: {
-        fontSize: height * 0.037,
+        fontSize: height * 0.04,
         fontWeight: 'bold',
         color: theme.colors.text,
-        marginBottom: hp(1),
+        marginBottom: height * 0.01,
+        textAlign: 'center'
     },
     subtitle: {
-        fontSize: height * 0.02,
+        fontSize: width * 0.05,
         color: theme.colors.neutral,
         marginBottom: height * 0.03,
+        textAlign: 'center',
     },
     inputWrapper: {
         flexDirection: 'row',
@@ -160,13 +153,29 @@ const styles = StyleSheet.create({
         marginBottom: height * 0.02,
         paddingHorizontal: width * 0.03,
     },
+    textAreaWrapper: {
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        width: '100%',
+        height: height * 0.15, // Adjusted to be smaller
+        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+        borderRadius: 10,
+        marginBottom: '4%',
+        paddingHorizontal: '3%',
+    },
     icon: {
-        marginRight: wp(2),
+        marginRight: width * 0.02,
     },
     input: {
         flex: 1,
         color: theme.colors.text,
-        fontSize: hp(2),
+        fontSize: height * 0.02,
+    },
+    textArea: {
+        flex: 1,
+        color: theme.colors.text,
+        fontSize: width * 0.045,
+        textAlignVertical: 'top',
     },
     button: {
         backgroundColor: theme.colors.accent2,
@@ -191,19 +200,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: height * 0.022,
     },
-    switchContainer: {
-        flexDirection: 'row',
-        marginTop: hp(3),
-    },
-    switchText: {
-        color: theme.colors.neutral,
-        fontSize: hp(1.8),
-    },
-    switchLink: {
-        color: theme.colors.accent1,
-        fontSize: hp(1.8),
-        fontWeight: 'bold',
-    },
     extrasContainer: {
         flexDirection: 'row',
         justifyContent: 'space-around',
@@ -222,4 +218,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default SignUpForm;
+export default AddPostScreen;
